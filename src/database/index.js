@@ -13,5 +13,5 @@ export const appDB = new Dexie('wallpaperDatabase');
 
 appDB.version(1).stores({
   wallpapers: 'id, createTime, dimension_x, dimension_y, ratio',
-  setting: 'name',
+  settings: 'key',
 });

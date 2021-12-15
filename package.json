@@ -96,6 +96,7 @@
     "antd": "^4.17.3",
     "dexie": "^3.2.0",
     "dexie-react-hooks": "^1.0.7",
+    "electron-is": "^3.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-wallpaper-napi": "^0.0.5",
     "got": "^12.0.0",

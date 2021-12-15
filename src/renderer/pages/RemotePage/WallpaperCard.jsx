@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Drawer, Divider, Space, Button } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
 
-import { appDB } from '../../database';
+import { appDB } from '../../../database';
 
 const { Meta } = Card;
 

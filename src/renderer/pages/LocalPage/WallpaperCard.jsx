@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Card } from 'antd';
-import { appDB } from '../../database';
+import { appDB } from '../../../database';
 
 export default function ({ wallpaper }) {
   const { id, createTime, imageBlob, resolution } = wallpaper;
@@ -14,7 +14,10 @@ export default function ({ wallpaper }) {
   }, []);
 
   const handleUseItClick = async () => {
-    await appDB.setting.put({ name: 'currentWallpaperID', value: id });
+    const { value } = await appDB.settings.get({ key: 'displays' });
+    console.log('------', value);
+    value[0].wallpaperSettting.wallpaper = id;
+    await appDB.settings.put({ key: 'displays', value });
   };
 
   return (

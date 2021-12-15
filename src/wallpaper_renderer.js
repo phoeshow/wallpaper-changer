@@ -27,4 +27,5 @@
  */
 
 // Add this to the end of the existing file
+import './index.css';
 import './wallpaper_renderer/app.jsx';

@@ -30,8 +30,6 @@ function GalleryList({ tag, page }) {
 
   if (isLoading) return <div>加载中</div>;
 
-  console.log(galleryData);
-
   if (galleryData.length > 0) {
     return galleryData.map((wallpaper) => {
       return <WallpaperCard wallpaper={wallpaper} key={wallpaper.id} />;

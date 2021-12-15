@@ -10,6 +10,9 @@ import Layout from './Layout';
 import RemotePage from './pages/RemotePage';
 import LocalPage from './pages/LocalPage';
 
+import { appDB } from '../database';
+import { getDeviceDisplays, refreshWallpapers } from './helper/screen';
+
 function render() {
   ReactDOM.render(
     <React.StrictMode>
@@ -28,4 +31,25 @@ function render() {
   );
 }
 
-render();
+async function start() {
+  // 检查配置中是否存在背景设置
+  let displaysSetting = await appDB.settings.get({ key: 'displays' });
+  let deviceDisplays;
+  if (!displaysSetting) {
+    deviceDisplays = await getDeviceDisplays();
+    // await appDB.settings.put({displays})
+    deviceDisplays.forEach((screen) => {
+      screen.wallpaperSettting = {
+        wallpaper: '',
+        backgroundColor: '#fff',
+        fillType: 'contain',
+      };
+    });
+    await appDB.settings.put({ key: 'displays', value: deviceDisplays });
+  } else {
+  }
+  refreshWallpapers();
+  render();
+}
+
+start();
