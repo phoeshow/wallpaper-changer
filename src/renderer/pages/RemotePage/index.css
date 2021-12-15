@@ -1,0 +1,42 @@
+.remote-page-container {
+  position: relative;
+}
+
+.search-container {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  padding: 0 12px;
+
+  align-items: center;
+  z-index: 20;
+}
+
+.remote-pagination-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
+.remote-gallery-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.remote-gallery-card-wrap {
+  margin: 12px;
+}
+
+.remote-gallery-card-cover {
+  width: 250px;
+}
+
+.remote-wallpapercard-colorinfo {
+  display: flex;
+  align-items: center;
+}
