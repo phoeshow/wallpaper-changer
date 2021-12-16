@@ -35,4 +35,6 @@ function GalleryList({ tag, page }) {
       return <WallpaperCard wallpaper={wallpaper} key={wallpaper.id} />;
     });
   }
+
+  return null;
 }

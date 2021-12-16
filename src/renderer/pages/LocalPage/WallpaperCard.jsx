@@ -3,7 +3,7 @@ import { Card } from 'antd';
 import { appDB } from '../../../database';
 
 export default function ({ wallpaper }) {
-  const { id, createTime, imageBlob, resolution } = wallpaper;
+  const { id, createTime, imageBlob, resolution, originalPath } = wallpaper;
   const imageRef = useRef(null);
   let blobImageSrc = window.URL.createObjectURL(imageBlob);
   useEffect(() => {
@@ -20,9 +20,20 @@ export default function ({ wallpaper }) {
     await appDB.settings.put({ key: 'displays', value });
   };
 
+  const handleDownload = () => {
+    window.electron.ipcRenderer.send('application:download_image', {
+      url: originalPath,
+    });
+  };
+
   return (
     <div className="local-page-wallpapercard-wrap">
-      <Card actions={[<span onClick={handleUseItClick}>use it</span>]}>
+      <Card
+        actions={[
+          <span onClick={handleUseItClick}>use it</span>,
+          <span onClick={handleDownload}>download</span>,
+        ]}
+      >
         <img
           ref={imageRef}
           className="local-page-wallpapercard-image"

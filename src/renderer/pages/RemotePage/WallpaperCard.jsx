@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Card, Drawer, Divider, Space, Button } from 'antd';
+import { Card, Drawer, Divider, Space, Button, message, Progress } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
 
 import { appDB } from '../../../database';
+import { useLiveQuery } from 'dexie-react-hooks';
+import throttle from 'lodash/throttle';
 
 const { Meta } = Card;
 
@@ -20,28 +22,49 @@ export default function WallpaperCard({ wallpaper }) {
 
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [wallpaperFileSize, setWallpaperFileSize] = useState(0);
+  const [downloadFileSize, setDownloadFileSize] = useState(0);
+  const [showDownloadProgress, setShowDownloadProgress] = useState(false);
+
+  const dbWallpaper = useLiveQuery(() => appDB.wallpapers.get({ id: id }));
 
   const handleSaveWallpaper = async () => {
-    const wallpaper = await appDB.wallpapers.get({ id: id });
-    console.log(wallpaper);
-    if (wallpaper) {
-      console.log('wallpaper is exist');
-    } else {
-      setLoading(true);
-      const imageBuffer = await window.electron.got(path).buffer();
-      const imageBlob = new Blob([imageBuffer]);
-      await appDB.wallpapers.put({
-        id,
-        imageBlob,
-        createTime: Date.now(),
-        ratio,
-        dimension_x,
-        dimension_y,
-        resolution,
-        originalPath: path,
-      });
-      setLoading(false);
-    }
+    setLoading(true);
+    setShowDownloadProgress(true);
+    const imageFetcher = window.electron.got(path);
+    imageFetcher.on(
+      'downloadProgress',
+      throttle(
+        (progress) => {
+          // {percent: 0.1037435533869914, transferred: 22389, total: 215811}
+          setDownloadProgress(Math.round(progress.percent * 100));
+          setDownloadFileSize(Math.ceil((progress.transferred || 0) / 1024));
+          setWallpaperFileSize(Math.ceil((progress.total || 0) / 1024));
+
+          if (progress.percent === 1) {
+            setTimeout(() => {
+              setShowDownloadProgress(false);
+            }, 300);
+          }
+        },
+        200,
+        { trailing: true }
+      )
+    );
+    const imageBuffer = await imageFetcher.buffer();
+    const imageBlob = new Blob([imageBuffer]);
+    await appDB.wallpapers.put({
+      id,
+      imageBlob,
+      createTime: Date.now(),
+      ratio,
+      dimension_x,
+      dimension_y,
+      resolution,
+      originalPath: path,
+    });
+    setLoading(false);
   };
 
   return (
@@ -99,8 +122,9 @@ export default function WallpaperCard({ wallpaper }) {
               onClick={handleSaveWallpaper}
               icon={<FolderOutlined />}
               loading={loading}
+              disabled={dbWallpaper}
             >
-              保存
+              {dbWallpaper ? '已收藏' : '收藏'}
             </Button>
           </Space>
         }
@@ -108,15 +132,24 @@ export default function WallpaperCard({ wallpaper }) {
         <section>
           <img
             style={{ width: '100%', height: 'auto' }}
-            src={path}
+            src={thumbs.original}
             alt="preview-wallpaper"
           />
         </section>
         <Divider />
+        <section
+          className="remote-wallpaper-download-progress"
+          style={{ maxHeight: showDownloadProgress ? '44px' : 0 }}
+        >
+          <Progress percent={downloadProgress} size="small" />
+          <section style={{ textAlign: 'center' }}>
+            {downloadFileSize}kB/{wallpaperFileSize}kB
+          </section>
+        </section>
         <section>
-          <h3>尺寸：</h3>
+          <h3>尺寸</h3>
           <p>{resolution}</p>
-          <h3>图片地址：</h3>
+          <h3>图片地址</h3>
           <p>{path}</p>
         </section>
       </Drawer>

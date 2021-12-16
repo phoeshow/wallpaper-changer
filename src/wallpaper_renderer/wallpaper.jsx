@@ -12,6 +12,8 @@ export default function () {
     (setting) => setting.key === 'displays'
   ).value;
 
+  console.log('=================>', displays, wallpapers);
+
   if (displays && wallpapers) {
     const currentDisplaySetting = displays.find(
       (display) => display.id === displayId
@@ -29,6 +31,8 @@ export default function () {
             height: '100vh',
             backgroundImage: `url('${blobImageSrc}')`,
             backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
         >
           <img

@@ -1,5 +1,6 @@
 import { screen, IpcMain, BrowserWindow, ipcMain } from 'electron';
 import electronWallpaper from 'electron-wallpaper-napi';
+import { download } from 'electron-dl';
 
 // 数组用来保存创建的窗口，防止被销毁
 const screenWallpaperWindowContainer = [];
@@ -65,9 +66,14 @@ export default function () {
 
     screenWallpaperWindowContainer.forEach((wallpaperWindow) => {
       wallpaperWindow.loadURL(WALLPAPER_WINDOW_WEBPACK_ENTRY);
-      // wallpaperWindow.webContents.openDevTools();
+      wallpaperWindow.webContents.openDevTools();
 
       electronWallpaper.attachWindow(wallpaperWindow);
     });
+  });
+
+  ipcMain.on('application:download_image', async (event, { url }) => {
+    const win = BrowserWindow.getFocusedWindow();
+    console.log(await download(win, url, { saveAs: true }));
   });
 }
