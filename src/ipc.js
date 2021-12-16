@@ -10,18 +10,39 @@ const wallpaperWindowProperties = {
 };
 
 export default function () {
-  ipcMain.on('show-new-window', () => {
-    console.log('new window');
-  });
-  // this is test
-  ipcMain.handle('get-screen', async (event, someArgument) => {
-    const displayList = screen.getAllDisplays();
-    return displayList;
-  });
-
   ipcMain.handle('application:get_displays', async () => {
     const displays = screen.getAllDisplays();
     return displays;
+  });
+
+  ipcMain.on('application:hide', () => {
+    const windows = BrowserWindow.getAllWindows();
+    for (let window of windows) {
+      if (window.title === 'Wallpaper Changer') {
+        window.hide();
+        break;
+      }
+    }
+  });
+
+  ipcMain.on('application:max', () => {
+    const windows = BrowserWindow.getAllWindows();
+    for (let window of windows) {
+      if (window.title === 'Wallpaper Changer') {
+        window.maximize();
+        break;
+      }
+    }
+  });
+
+  ipcMain.on('application:min', () => {
+    const windows = BrowserWindow.getAllWindows();
+    for (let window of windows) {
+      if (window.title === 'Wallpaper Changer') {
+        window.minimize();
+        break;
+      }
+    }
   });
 
   ipcMain.on('application:refresh_wallpaper', () => {

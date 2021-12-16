@@ -27,7 +27,8 @@ export default function () {
           style={{
             width: '100vw',
             height: '100vh',
-            backgroundColor: backgroundColor,
+            backgroundImage: `url('${blobImageSrc}')`,
+            backgroundSize: 'cover',
           }}
         >
           <img
@@ -35,6 +36,7 @@ export default function () {
               width: '100vw',
               height: '100vh',
               objectFit: fillType,
+              backdropFilter: 'blur(25px)',
             }}
             src={blobImageSrc}
           />

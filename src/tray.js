@@ -1,9 +1,14 @@
 import { Tray, Menu, BrowserWindow } from 'electron';
+import is from 'electron-is';
 
 let tray;
 
+const iconFilePath = is.windows()
+  ? 'src/icons/win/icon.ico'
+  : 'src/png/64x64.png';
+
 export default function createTray() {
-  tray = new Tray('resources/icon.ico');
+  tray = new Tray(iconFilePath);
 
   const trayContextMenu = Menu.buildFromTemplate([
     {

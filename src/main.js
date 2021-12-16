@@ -4,6 +4,10 @@ import ipc from './ipc';
 import createTray from './tray';
 import is from 'electron-is';
 
+const iconFilePath = is.windows()
+  ? 'src/icons/win/icon.ico'
+  : 'src/png/64x64.png';
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -20,6 +24,7 @@ const createWindow = () => {
     minHeight: 800,
     frame: false,
     title: 'Wallpaper Changer',
+    icon: iconFilePath,
     show: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,

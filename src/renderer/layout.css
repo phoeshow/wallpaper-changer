@@ -15,6 +15,7 @@
 .header-space {
   flex: 1;
   justify-self: stretch;
+  -webkit-app-region: drag;
 }
 
 .app-page-wrap {

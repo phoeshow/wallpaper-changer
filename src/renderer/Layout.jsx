@@ -1,9 +1,10 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import './layout.css';
 
 import Brand from './components/Brand';
 import Navigator from './components/Navigator';
+import ControlBtn from './components/ControlBtn';
 
 const Layout = () => {
   return (
@@ -12,6 +13,7 @@ const Layout = () => {
         <Brand />
         <Navigator />
         <div className="header-space"></div>
+        <ControlBtn />
       </header>
 
       <section className="app-page-wrap">
