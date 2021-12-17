@@ -1,52 +1,65 @@
-import React, { useEffect, useRef } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import React, { useEffect, useState } from 'react';
 import { appDB } from '../database';
 
 const { displayId } = window.electron;
 
 export default function () {
-  const settings = useLiveQuery(() => appDB.settings.toArray());
-  const wallpapers = useLiveQuery(() => appDB.wallpapers.toArray());
+  const [wallpaperInfo, setWallpaperInfo] = useState({});
+  const { imageBlob, fillType, backgroundColor } = wallpaperInfo;
 
-  const displays = settings?.find(
-    (setting) => setting.key === 'displays'
-  ).value;
+  useEffect(() => {
+    const fn = async () => {
+      const [settings, wallpapers] = await Promise.all([
+        appDB.settings.toArray(),
+        appDB.wallpapers.toArray(),
+      ]);
 
-  console.log('=================>', displays, wallpapers);
+      const displays = settings.find(
+        (setting) => setting.key === 'displays'
+      ).value;
 
-  if (displays && wallpapers) {
-    const currentDisplaySetting = displays.find(
-      (display) => display.id === displayId
-    );
-    const { wallpaperSettting } = currentDisplaySetting;
-    const { backgroundColor, wallpaper, fillType } = wallpaperSettting;
-    const { imageBlob } =
-      wallpapers.find((wallpaperItem) => wallpaperItem.id === wallpaper) || {};
-    if (imageBlob) {
-      let blobImageSrc = window.URL.createObjectURL(imageBlob);
-      return (
-        <div
+      const currentDisplaySetting = displays.find(
+        (display) => display.id === displayId
+      );
+
+      const { wallpaperSettting } = currentDisplaySetting;
+      const { backgroundColor, wallpaper, fillType } = wallpaperSettting;
+      const { imageBlob } =
+        wallpapers.find((wallpaperItem) => wallpaperItem.id === wallpaper) ||
+        {};
+      setWallpaperInfo({ imageBlob, fillType, backgroundColor });
+    };
+    fn();
+
+    window.electron.receive('screenWallpaper:refresh', () => {
+      fn();
+    });
+  }, []);
+
+  if (imageBlob) {
+    let blobImageSrc = window.URL.createObjectURL(imageBlob);
+    return (
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundImage: `url('${blobImageSrc}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <img
           style={{
             width: '100vw',
             height: '100vh',
-            backgroundImage: `url('${blobImageSrc}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
+            objectFit: fillType,
+            backdropFilter: 'blur(25px)',
           }}
-        >
-          <img
-            style={{
-              width: '100vw',
-              height: '100vh',
-              objectFit: fillType,
-              backdropFilter: 'blur(25px)',
-            }}
-            src={blobImageSrc}
-          />
-        </div>
-      );
-    }
+          src={blobImageSrc}
+        />
+      </div>
+    );
   }
 
   return null;

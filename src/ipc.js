@@ -46,7 +46,7 @@ export default function () {
     }
   });
 
-  ipcMain.on('application:refresh_wallpaper', () => {
+  ipcMain.on('application:start_wallpapers_window', () => {
     screen.getAllDisplays().forEach((screenObj, idx) => {
       if (screenWallpaperWindowContainer[idx]) {
         screenWallpaperWindowContainer[idx].destroy();
@@ -66,7 +66,7 @@ export default function () {
 
     screenWallpaperWindowContainer.forEach((wallpaperWindow) => {
       wallpaperWindow.loadURL(WALLPAPER_WINDOW_WEBPACK_ENTRY);
-      wallpaperWindow.webContents.openDevTools();
+      // wallpaperWindow.webContents.openDevTools();
 
       electronWallpaper.attachWindow(wallpaperWindow);
     });
@@ -75,5 +75,11 @@ export default function () {
   ipcMain.on('application:download_image', async (event, { url }) => {
     const win = BrowserWindow.getFocusedWindow();
     console.log(await download(win, url, { saveAs: true }));
+  });
+
+  ipcMain.on('application:refresh_wallpapers_window', () => {
+    for (let screenWallpaperWindow of screenWallpaperWindowContainer) {
+      screenWallpaperWindow.webContents.send('screenWallpaper:refresh');
+    }
   });
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Card } from 'antd';
 import { appDB } from '../../../database';
+import { refreshWallpapersWindow } from '../../helper/screen';
 
 export default function ({ wallpaper }) {
   const { id, createTime, imageBlob, resolution, originalPath } = wallpaper;
@@ -18,6 +19,8 @@ export default function ({ wallpaper }) {
     console.log('------', value);
     value[0].wallpaperSettting.wallpaper = id;
     await appDB.settings.put({ key: 'displays', value });
+
+    refreshWallpapersWindow();
   };
 
   const handleDownload = () => {

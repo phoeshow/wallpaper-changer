@@ -13,4 +13,10 @@ contextBridge.exposeInMainWorld('electron', {
   ipcRenderer,
   got,
   displayId: Number(displayId),
+  receive: (channel, func) => {
+    let validChannels = ['screenWallpaper:refresh'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (event, ...args) => func(...args));
+    }
+  },
 });

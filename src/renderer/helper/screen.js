@@ -5,6 +5,10 @@ export const getDeviceDisplays = async () => {
   return displays;
 };
 
-export const refreshWallpapers = () => {
-  ipcRenderer.send('application:refresh_wallpaper');
+export const starthWallpapersWindow = () => {
+  ipcRenderer.send('application:start_wallpapers_window');
+};
+
+export const refreshWallpapersWindow = () => {
+  ipcRenderer.send('application:refresh_wallpapers_window');
 };

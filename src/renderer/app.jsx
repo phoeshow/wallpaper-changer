@@ -11,7 +11,7 @@ import RemotePage from './pages/RemotePage';
 import LocalPage from './pages/LocalPage';
 
 import { appDB } from '../database';
-import { getDeviceDisplays, refreshWallpapers } from './helper/screen';
+import { getDeviceDisplays, starthWallpapersWindow } from './helper/screen';
 
 function render() {
   ReactDOM.render(
@@ -37,7 +37,7 @@ async function start() {
   let deviceDisplays;
   if (!displaysSetting) {
     deviceDisplays = await getDeviceDisplays();
-    // await appDB.settings.put({displays})
+
     deviceDisplays.forEach((screen) => {
       screen.wallpaperSettting = {
         wallpaper: '',
@@ -46,9 +46,8 @@ async function start() {
       };
     });
     await appDB.settings.put({ key: 'displays', value: deviceDisplays });
-  } else {
   }
-  refreshWallpapers();
+  starthWallpapersWindow();
   render();
 }
 
