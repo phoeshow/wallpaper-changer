@@ -14,10 +14,10 @@ export default function Navigator() {
 
   return (
     <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
-      <Menu.Item key="/remote" icon={<GlobalOutlined />}>
+      <Menu.Item key="/" icon={<GlobalOutlined />}>
         Remote
       </Menu.Item>
-      <Menu.Item key="/" icon={<DesktopOutlined />}>
+      <Menu.Item key="/local" icon={<DesktopOutlined />}>
         Local
       </Menu.Item>
     </Menu>

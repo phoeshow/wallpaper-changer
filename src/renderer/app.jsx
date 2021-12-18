@@ -20,8 +20,8 @@ function render() {
         <MemoryRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="remote" element={<RemotePage />} />
-              <Route index element={<LocalPage />} />
+              <Route index element={<RemotePage />} />
+              <Route path="local" element={<LocalPage />} />
             </Route>
           </Routes>
         </MemoryRouter>
