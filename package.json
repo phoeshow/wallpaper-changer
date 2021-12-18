@@ -10,7 +10,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "make:icon": "electron-icon-maker --input=./icon/original.png --output=./src"
+    "make:icon": "electron-icon-maker --input=./icon/original.png --output=./"
   },
   "keywords": [],
   "author": {
@@ -20,7 +20,10 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./icons/win/icon.ico",
+        "name": "Wallpaper Changer"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
