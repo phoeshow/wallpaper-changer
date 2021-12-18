@@ -33,6 +33,7 @@ export default function WallpaperCard({ wallpaper }) {
     setLoading(true);
     setShowDownloadProgress(true);
     const imageFetcher = window.electron.got(path);
+    const imageThumbFetcher = window.electron.got(thumbs.large);
     imageFetcher.on(
       'downloadProgress',
       throttle(
@@ -52,8 +53,12 @@ export default function WallpaperCard({ wallpaper }) {
         { trailing: true }
       )
     );
-    const imageBuffer = await imageFetcher.buffer();
+    const [imageBuffer, imageThumbBuffer] = await Promise.all([
+      imageFetcher.buffer(),
+      imageThumbFetcher.buffer(),
+    ]);
     const imageBlob = new Blob([imageBuffer]);
+    const imageThumbBlob = new Blob([imageThumbBuffer]);
     await appDB.wallpapers.put({
       id,
       imageBlob,
@@ -63,6 +68,7 @@ export default function WallpaperCard({ wallpaper }) {
       dimension_y,
       resolution,
       originalPath: path,
+      thumb: imageThumbBlob,
     });
     setLoading(false);
   };
@@ -124,7 +130,7 @@ export default function WallpaperCard({ wallpaper }) {
               loading={loading}
               disabled={dbWallpaper}
             >
-              {dbWallpaper ? '已收藏' : '收藏'}
+              {dbWallpaper ? 'Favourited' : 'Favourite'}
             </Button>
           </Space>
         }
@@ -147,9 +153,9 @@ export default function WallpaperCard({ wallpaper }) {
           </section>
         </section>
         <section>
-          <h3>尺寸</h3>
+          <h3>Size</h3>
           <p>{resolution}</p>
-          <h3>图片地址</h3>
+          <h3>Original Path</h3>
           <p>{path}</p>
         </section>
       </Drawer>

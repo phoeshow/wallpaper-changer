@@ -3,7 +3,7 @@ import './index.css';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { appDB } from '../../../database';
 
-import { Button } from 'antd';
+import WallpaperDrawer from './WallpaperDrawer';
 
 import WallpaperCard from './WallpaperCard';
 
@@ -12,19 +12,13 @@ const LocalPage = () => {
     appDB.wallpapers.orderBy('createTime').toArray()
   );
 
-  // const handleClick = async () => {
-  //   const res = await window.electron.ipcRenderer.invoke('get-screen', {
-  //     a: 'b',
-  //   });
-  //   console.log(res);
-  // };
-
   if (wallpapers) {
     return (
       <section className="local-page-container">
         {wallpapers.map((wallpaper) => {
           return <WallpaperCard key={wallpaper.id} wallpaper={wallpaper} />;
         })}
+        <WallpaperDrawer />
       </section>
     );
   }

@@ -54,7 +54,7 @@ export default function () {
             width: '100vw',
             height: '100vh',
             objectFit: fillType,
-            backdropFilter: 'blur(25px)',
+            backdropFilter: 'blur(30px)',
           }}
           src={blobImageSrc}
         />
