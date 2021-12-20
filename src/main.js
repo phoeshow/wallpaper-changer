@@ -10,16 +10,22 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const additionalData = { appKey: 'wallpaper changer' };
+const gotTheLock = app.requestSingleInstanceLock(additionalData);
+
+let mainWindow = null;
+
 const createWindow = () => {
-  ipc();
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 1200,
     minHeight: 800,
     frame: false,
+    show: false,
     title: 'Wallpaper Changer',
+    backgroundColor: '#ffffff',
     icon: is.windows()
       ? path.resolve(__dirname, '..', 'icons/win/icon.ico')
       : path.resolve(__dirname, '..', 'icons/png/48x48.png'),
@@ -31,10 +37,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  // 注册系统托盘
-  const tray = createTray();
-  tray.on('click', () => {
+  mainWindow.on('ready-to-show', () => {
     mainWindow.show();
   });
 
@@ -44,10 +47,34 @@ const createWindow = () => {
   }
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on(
+    'second-instance',
+    (event, commandLine, workingDirectory, additionalData) => {
+      // Print out data received from the second instance.
+      console.log(additionalData);
+
+      // Someone tried to run a second instance, we should focus our window.
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        if (!mainWindow.isVisible()) mainWindow.show();
+        mainWindow.focus();
+      }
+    }
+  );
+
+  app.whenReady().then(() => {
+    ipc();
+    // 注册系统托盘
+    const tray = createTray();
+    tray.on('click', () => {
+      mainWindow.show();
+    });
+    createWindow();
+  });
+}
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
