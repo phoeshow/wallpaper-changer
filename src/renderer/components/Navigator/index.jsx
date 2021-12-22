@@ -13,7 +13,12 @@ export default function Navigator() {
   };
 
   return (
-    <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
+    <Menu
+      onClick={handleClick}
+      selectedKeys={[current]}
+      mode="horizontal"
+      style={{ minWidth: '220px' }}
+    >
       <Menu.Item key="/" icon={<GlobalOutlined />}>
         Remote
       </Menu.Item>

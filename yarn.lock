@@ -957,10 +957,10 @@
     "mkdirp" "^1.0.4"
     "rimraf" "^3.0.2"
 
-"@phoeshow/electron-wallpaper@^0.0.1":
-  "integrity" "sha512-AK38RPLKVPyvYT9exhSIpTjcabs3ohE+CPhVzK3rNdHC6QzBOsOmsb+DAXljAaxngs8oOOnQTvqw+MSjuM5W1w=="
-  "resolved" "https://registry.npmjs.org/@phoeshow/electron-wallpaper/-/electron-wallpaper-0.0.1.tgz"
-  "version" "0.0.1"
+"@phoeshow/electron-wallpaper@^0.0.2":
+  "integrity" "sha512-sfevlUgrEEPPlwDq7L8aoFtPjelv0bYz7vCGvNf2iK3aK2tiYjxeJaNNzH3gXf1fkTOMgRSEm/950S03+CnemA=="
+  "resolved" "https://registry.npmmirror.com/@phoeshow/electron-wallpaper/download/@phoeshow/electron-wallpaper-0.0.2.tgz"
+  "version" "0.0.2"
   dependencies:
     "bindings" "^1.5.0"
     "node-addon-api" "^4.2.0"

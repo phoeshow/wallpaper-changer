@@ -8,7 +8,7 @@ export default function createTray() {
   tray = new Tray(
     is.windows()
       ? path.resolve(__dirname, '..', 'icons/win/icon.ico')
-      : path.resolve(__dirname, '..', 'icons/png/48x48.png')
+      : path.resolve(__dirname, '..', 'icons/png/24x24.png')
   );
 
   const trayContextMenu = Menu.buildFromTemplate([

@@ -28,12 +28,16 @@ const createWindow = () => {
     backgroundColor: '#ffffff',
     icon: is.windows()
       ? path.resolve(__dirname, '..', 'icons/win/icon.ico')
-      : path.resolve(__dirname, '..', 'icons/png/48x48.png'),
+      : path.resolve(__dirname, '..', 'icons/png/64x64.png'),
     show: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
+
+  if (is.macOS()) {
+    app.dock.setIcon(path.resolve(__dirname, '..', 'icons/png/128x128.png'));
+  }
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);

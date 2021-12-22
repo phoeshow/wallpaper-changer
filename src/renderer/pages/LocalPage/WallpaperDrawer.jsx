@@ -92,7 +92,7 @@ const WallpaperDrawer = () => {
           {displays.map((display, idx) => {
             return (
               <Button onClick={setWallpaper(display.id)} key={display.id}>
-                Set Screen {idx}
+                Set Screen {idx + 1}
               </Button>
             );
           })}

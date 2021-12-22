@@ -1,6 +1,7 @@
 import { screen, IpcMain, BrowserWindow, ipcMain } from 'electron';
 import electronWallpaper from '@phoeshow/electron-wallpaper';
 import { download } from 'electron-dl';
+import is from 'electron-is';
 
 // 数组用来保存创建的窗口，防止被销毁
 const screenWallpaperWindowContainer = [];
@@ -8,7 +9,12 @@ const screenWallpaperWindowContainer = [];
 const wallpaperWindowProperties = {
   transparent: true,
   frame: false,
+  roundedCorners: false,
 };
+
+if (is.macOS()) {
+  wallpaperWindowProperties.type = 'desktop';
+}
 
 export default function () {
   ipcMain.handle('application:get_displays', async () => {
@@ -67,8 +73,9 @@ export default function () {
     screenWallpaperWindowContainer.forEach((wallpaperWindow) => {
       wallpaperWindow.loadURL(WALLPAPER_WINDOW_WEBPACK_ENTRY);
       // wallpaperWindow.webContents.openDevTools();
-
-      electronWallpaper.attachWindow(wallpaperWindow);
+      if (is.windows()) {
+        electronWallpaper.attachWindow(wallpaperWindow);
+      }
     });
   });
 
