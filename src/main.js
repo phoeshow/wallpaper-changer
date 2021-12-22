@@ -27,8 +27,8 @@ const createWindow = () => {
     title: 'Wallpaper Changer',
     backgroundColor: '#ffffff',
     icon: is.windows()
-      ? path.resolve(__dirname, '..', 'icons/win/icon.ico')
-      : path.resolve(__dirname, '..', 'icons/png/64x64.png'),
+      ? path.resolve(__dirname, '..', 'icons/icon.ico')
+      : path.resolve(__dirname, '..', 'icons/icon.icns'),
     show: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
@@ -36,7 +36,7 @@ const createWindow = () => {
   });
 
   if (is.macOS()) {
-    app.dock.setIcon(path.resolve(__dirname, '..', 'icons/png/128x128.png'));
+    app.dock.setIcon(path.resolve(__dirname, '..', 'icons/128x128.png'));
   }
 
   // and load the index.html of the app.
