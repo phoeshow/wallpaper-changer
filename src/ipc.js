@@ -1,5 +1,5 @@
 import { screen, IpcMain, BrowserWindow, ipcMain } from 'electron';
-import electronWallpaper from 'electron-wallpaper-napi';
+import electronWallpaper from '@phoeshow/electron-wallpaper';
 import { download } from 'electron-dl';
 
 // 数组用来保存创建的窗口，防止被销毁
