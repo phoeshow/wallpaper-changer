@@ -18,10 +18,10 @@ let mainWindow = null;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1660,
-    height: 955,
-    minWidth: 1660,
-    minHeight: 955,
+    width: 1200,
+    height: 800,
+    minWidth: 1200,
+    minHeight: 800,
     frame: false,
     show: false,
     title: 'Wallpaper Changer',
