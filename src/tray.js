@@ -1,4 +1,4 @@
-import { Tray, Menu, BrowserWindow } from 'electron';
+import { Tray, Menu, BrowserWindow, app } from 'electron';
 import is from 'electron-is';
 import path from 'path';
 
@@ -31,7 +31,9 @@ export default function createTray() {
     },
     {
       label: '退出',
-      role: 'quit',
+      click: () => {
+        app.exit();
+      },
     },
   ]);
 

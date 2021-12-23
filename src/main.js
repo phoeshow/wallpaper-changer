@@ -18,10 +18,10 @@ let mainWindow = null;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    minWidth: 1200,
-    minHeight: 800,
+    width: 1660,
+    height: 955,
+    minWidth: 1660,
+    minHeight: 955,
     frame: false,
     show: false,
     title: 'Wallpaper Changer',
@@ -34,10 +34,6 @@ const createWindow = () => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
-
-  if (is.macOS()) {
-    app.dock.setIcon(path.resolve(__dirname, '..', 'icons/128x128.png'));
-  }
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -69,15 +65,22 @@ if (!gotTheLock) {
     }
   );
 
-  app.whenReady().then(() => {
-    ipc();
-    // 注册系统托盘
-    const tray = createTray();
-    tray.on('click', () => {
-      mainWindow.show();
+  app
+    .whenReady()
+    .then(() => {
+      if (is.macOS()) {
+        app.dock.hide();
+      }
+    })
+    .then(() => {
+      ipc();
+      // 注册系统托盘
+      const tray = createTray();
+      tray.on('click', () => {
+        mainWindow.show();
+      });
+      createWindow();
     });
-    createWindow();
-  });
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
